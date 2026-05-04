@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+
   schedule:
-    # 09:00 Europe/Moscow (UTC +3)
+    # 09:00 Europe/Moscow / 06:00 UTC
     - cron: "0 6 * * *"
+
   workflow_dispatch:
 
 permissions:
@@ -29,6 +31,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
       - name: Build
         run: ./gradlew clean build
 
@@ -36,12 +41,19 @@ jobs:
         shell: bash
         run: |
           VERSION="$(grep '^version = ' build.gradle | sed -E 's/version = "([^"]+)"/\1/')"
+
+          if [ -z "$VERSION" ]; then
+            VERSION="dev"
+          fi
+
           STAMP="$(date -u +'%Y%m%d-%H%M%S')"
+
           if [ "${{ github.event_name }}" = "schedule" ]; then
             KIND="daily"
           else
             KIND="main"
           fi
+
           echo "RELEASE_TAG=v${VERSION}-${KIND}-${STAMP}-${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
           echo "RELEASE_NAME=KozelSmpWebApi ${VERSION} (${KIND} ${STAMP} UTC)" >> "$GITHUB_ENV"
 
