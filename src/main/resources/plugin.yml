@@ -1,0 +1,6 @@
+name: KozelSmpWebApi
+version: ${version}
+main: ru.kozel.smp.webapi.KozelSmpWebApiPlugin
+api-version: '1.20'
+author: AL-S
+description: HTTP JSON API for Kozel SMP player statistics.

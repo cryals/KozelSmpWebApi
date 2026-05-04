@@ -1,0 +1,14 @@
+# Bind to 127.0.0.1 when nginx or another local service proxies requests.
+# Use 0.0.0.0 only when you intentionally expose this API directly.
+host: "127.0.0.1"
+port: 8087
+
+# Empty token means public API.
+# When set, requests must include either:
+# Authorization: Bearer YOUR_TOKEN
+# or:
+# X-API-Key: YOUR_TOKEN
+token: ""
+
+# Snapshot refresh interval. 20 ticks is about one second.
+update-interval-ticks: 20

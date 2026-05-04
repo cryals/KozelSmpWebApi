@@ -1,0 +1,43 @@
+plugins {
+    id "java"
+}
+
+group = "ru.kozel.smp"
+version = "1.0.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 21
+}
+
+processResources {
+    filteringCharset = "UTF-8"
+    filesMatching("plugin.yml") {
+        expand("version": project.version)
+    }
+}
+
+jar {
+    from("LICENSE") {
+        into("META-INF")
+    }
+
+    manifest {
+        attributes(
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.version,
+                "Implementation-Vendor": "AL-S",
+                "License": "MPL-2.0"
+        )
+    }
+}
